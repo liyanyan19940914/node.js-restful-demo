@@ -3,17 +3,21 @@ var Http = require('http'),
     server,
     router;
 router = new Router;
+var bodyParse = require('body-parser');
+router.use(bodyParse.text());
 
 var counter = 0,
     todolist = {};
 
 function createItem(request,response){
-    var id = counter += 1;
-    console.log('createId:',id);
+    var id = counter += 1,
+        Item = request.body;
+    console.log('createId:',Item);
     response.writeHead(201,{
-        'Content-Type':'text/plain'
+        'Content-Type':'text/plain',
+        'Location':'/todo'+id
     });
-    response.end('Item:'+id);
+    response.end(Item);
 }
 
 router.post('/todo',createItem);
