@@ -59,9 +59,43 @@ function deleteItem(request,response) {
     response.end('')
 }
 
+function readList( request, response ) {
+    var item,
+        itemList = [],
+        listString;
+
+    for ( id in todoList ) {
+        if ( !todoList.hasOwnProperty( id ) ) {
+            continue;
+        }
+
+        item = todoList[ id ];
+
+        if ( typeof item !== 'string' ) {
+            continue;
+        }
+
+        itemList.push( item );
+    }
+
+    console.log( 'Read List: \n', JSON.stringify(
+        itemList,
+        null,
+        '  '
+    ));
+
+    listString = itemList.join( '\n' );
+
+    response.writeHead( 200, {
+        'Content-Type' : 'tet/plain'
+    });
+    response.end( listString );
+}
+
 router.post('/todo',createItem);
 router.get('/todo/:id',readItem);
 router.delete('/todo/:id',deleteItem);
+router.get('/todolist',readList);
 
 server = Http.createServer(function(request,response){
     router(request,response,function(err){
