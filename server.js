@@ -4,6 +4,20 @@ var Http = require('http'),
     router;
 router = new Router;
 
+var counter = 0,
+    todolist = {};
+
+function createItem(request,response){
+    var id = counter += 1;
+    console.log('createId:',id);
+    response.writeHead(201,{
+        'Content-Type':'text/plain'
+    });
+    response.end('Item:'+id);
+}
+
+router.post('/todo',createItem);
+
 server = Http.createServer(function(request,response){
     router(request,response,function(err){
         if(!err){
